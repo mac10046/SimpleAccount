@@ -20,12 +20,9 @@ import java.util.ResourceBundle;
 import org.controlsfx.control.CheckComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.uptech.accounted.bean.Department;
 import com.uptech.accounted.bean.Initiator;
@@ -33,7 +30,6 @@ import com.uptech.accounted.bean.Ledger;
 import com.uptech.accounted.bean.Master;
 import com.uptech.accounted.bean.QTransaction;
 import com.uptech.accounted.bean.Recipient;
-import com.uptech.accounted.bean.SubjectMatter;
 import com.uptech.accounted.bean.Subledger;
 import com.uptech.accounted.bean.SubledgerId;
 import com.uptech.accounted.bean.Transaction;
@@ -42,10 +38,8 @@ import com.uptech.accounted.config.StageManager;
 import com.uptech.accounted.repository.DepartmentRepository;
 import com.uptech.accounted.repository.InitiatorRepository;
 import com.uptech.accounted.repository.RecipientRepository;
-import com.uptech.accounted.repository.SubjectMatterRepository;
 import com.uptech.accounted.repository.TransactionRepository;
 import com.uptech.accounted.service.LedgerServiceImpl;
-import com.uptech.accounted.service.SubjectMatterServiceImpl;
 import com.uptech.accounted.service.SubledgerServiceImpl;
 import com.uptech.accounted.service.TransactionServiceImpl;
 
@@ -118,9 +112,6 @@ public class ReportsController implements Initializable {
   private DepartmentRepository departmentRepository;
 
   @Autowired
-  private SubjectMatterServiceImpl subjectMatterServiceImpl;
-
-  @Autowired
   private LedgerServiceImpl ledgerServiceImpl;
 
   @Autowired
@@ -131,9 +122,6 @@ public class ReportsController implements Initializable {
 
   @Autowired
   private RecipientRepository recipientRepository;
-
-  @Autowired
-  private SubjectMatterRepository subjectMatterRepository;
 
   @Autowired
   private TransactionServiceImpl transactionService;
@@ -170,8 +158,6 @@ public class ReportsController implements Initializable {
         .map(item -> new Department(item.split("-")[0], item.split("-")[1])).collect(toList());
     List<Recipient> recipients = cbRecipients.getCheckModel().getCheckedItems().stream()
         .map(item -> new Recipient(item.split("-")[0], item.split("-")[1])).collect(toList());
-    List<SubjectMatter> subjectMatters = cbSubjects.getCheckModel().getCheckedItems().stream()
-        .map(item -> new SubjectMatter(item.split("-")[0], item.split("-")[1])).collect(toList());
     List<TransactionType> transactionTypes = cbTransactions.getCheckModel().getCheckedItems().stream()
         .collect(toList());
     List<Subledger> subledgers = cbSubledgerType.getCheckModel().getCheckedItems().stream().filter(i -> i != null)
@@ -188,7 +174,7 @@ public class ReportsController implements Initializable {
     BooleanExpression in = transaction.department.in(departments).and(transaction.initiator.in(initiators))
         .and(transaction.recipient.in(recipients)).and(transaction.transactionType.in(transactionTypes))
         .and(transaction.subledgerType.in(subledgers)).and(transaction.dateOfTransaction.after(fromDate.getValue().minusDays(1)))
-        .and(transaction.dateOfTransaction.before(toDate.getValue().plusDays(1))).and(transaction.subjectMatter.in(subjectMatters))
+        .and(transaction.dateOfTransaction.before(toDate.getValue().plusDays(1)))
         .and(transaction.amount.between(new BigDecimal(getFromAmount()), new BigDecimal(getToAmount())));
     Iterable<Transaction> all = transactionRepository.findAll(in, transaction.dateOfTransaction.asc());
 
@@ -233,7 +219,6 @@ public class ReportsController implements Initializable {
     loadDepartments();
     loadLedgers();
     loadRecipients();
-    loadSubjectMatters();
     makeAmountFieldNumericOnly();
     setupDefaults();
 
@@ -368,10 +353,6 @@ public class ReportsController implements Initializable {
 
     ObservableList<TransactionType> comboList = FXCollections.observableArrayList(transactionTypes);
     cbTransactions.getItems().addAll(comboList);
-  }
-
-  private void loadSubjectMatters() {
-    loadMaster(subjectMatterRepository, cbSubjects);
   }
 
   private void loadRecipients() {

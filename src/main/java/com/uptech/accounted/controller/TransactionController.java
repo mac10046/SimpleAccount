@@ -2,7 +2,6 @@ package com.uptech.accounted.controller;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.chrono.HijrahChronology;
@@ -32,9 +31,7 @@ import com.uptech.accounted.config.StageManager;
 import com.uptech.accounted.repository.DepartmentRepository;
 import com.uptech.accounted.repository.InitiatorRepository;
 import com.uptech.accounted.repository.RecipientRepository;
-import com.uptech.accounted.repository.SubjectMatterRepository;
 import com.uptech.accounted.service.LedgerServiceImpl;
-import com.uptech.accounted.service.SubjectMatterServiceImpl;
 import com.uptech.accounted.service.SubledgerServiceImpl;
 import com.uptech.accounted.service.TransactionServiceImpl;
 import com.uptech.accounted.utils.ColumnDateFormatter;
@@ -174,9 +171,6 @@ public class TransactionController implements Initializable {
   private DepartmentRepository departmentRepository;
 
   @Autowired
-  private SubjectMatterServiceImpl subjectMatterServiceImpl;
-
-  @Autowired
   private LedgerServiceImpl ledgerServiceImpl;
 
   @Autowired
@@ -187,9 +181,6 @@ public class TransactionController implements Initializable {
 
   @Autowired
   private RecipientRepository recipientRepository;
-
-  @Autowired
-  private SubjectMatterRepository subjectMatterRepository;
 
   @Autowired
   private TransactionServiceImpl transactionService;
@@ -244,7 +235,6 @@ public class TransactionController implements Initializable {
     transaction.setAmount(transactionAmount);
     transaction.setNarration(getNarration());
     transaction.setTransactionType(getTransactionType());
-    transaction.setSubjectMatter(subjectMatterServiceImpl.findByCode(getSubjectMatter()));
 
     Transaction newTransaction = transactionService.save(transaction);
     loadTransactionDetails();
@@ -381,7 +371,6 @@ public class TransactionController implements Initializable {
     loadDepartments();
     loadLedgers();
     loadRecipients();
-    loadSubjectMatters();
     makeAmountFieldNumericOnly();
     HijrahChronology hijriChronology = HijrahChronology.INSTANCE;
     dateOfTransaction.setChronology(hijriChronology);
@@ -430,8 +419,6 @@ public class TransactionController implements Initializable {
         cbSubledgerType.getSelectionModel().select(selectedItem.getSubledgerType().getSubledgerId().getSubledgerCode()
             + "-" + selectedItem.getSubledgerType().getSubledgerName());
         cbTransactionType.getSelectionModel().select(selectedItem.getTransactionType());
-        cbSubjectMatter.getSelectionModel()
-            .select(selectedItem.getSubjectMatter().getCode() + "-" + selectedItem.getSubjectMatter().getName());
         dateOfTransaction.setValue(selectedItem.getDateOfTransaction());
         amount.setText(getIndianCurrencyFormat(selectedItem.getAmount()));
         narration.setText(selectedItem.getNarration().toString());
@@ -499,10 +486,6 @@ public class TransactionController implements Initializable {
 
     ObservableList<TransactionType> comboList = FXCollections.observableArrayList(transactionTypes);
     cbTransactionType.setItems(comboList);
-  }
-
-  private void loadSubjectMatters() {
-    loadMaster(subjectMatterRepository, cbSubjectMatter);
   }
 
   private void loadRecipients() {

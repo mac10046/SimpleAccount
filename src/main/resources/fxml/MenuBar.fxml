@@ -6,7 +6,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
-<MenuBar BorderPane.alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uptech.accounted.controller.MenuBarController">
+<MenuBar BorderPane.alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uptech.accounted.controller.MenuBarController">
 	<menus>
 		<Menu mnemonicParsing="false" text="File">
 			<items>
@@ -15,11 +15,10 @@
 		</Menu>
 		<Menu mnemonicParsing="false" text="Forms">
 			<items>
+				<MenuItem mnemonicParsing="false" onAction="#showLedgerForm" text="Ledger" />
 				<MenuItem mnemonicParsing="false" onAction="#showDepartmentForm" text="Department" />
 				<MenuItem mnemonicParsing="false" onAction="#showInitiatorForm" text="Initiator" />
-				<MenuItem mnemonicParsing="false" onAction="#showSubjectMatterForm" text="SubjectMatter" />
 				<MenuItem mnemonicParsing="false" onAction="#showRecipientForm" text="Recepient" />
-				<MenuItem mnemonicParsing="false" onAction="#showLedgerForm" text="Ledger" />
 			</items>
 		</Menu>
 		<Menu mnemonicParsing="false" text="">

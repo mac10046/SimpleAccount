@@ -9,7 +9,6 @@ import com.uptech.accounted.controller.LoginController;
 import com.uptech.accounted.controller.MenuBarController;
 import com.uptech.accounted.controller.RecipientController;
 import com.uptech.accounted.controller.ReportsController;
-import com.uptech.accounted.controller.SubjectMatterController;
 import com.uptech.accounted.controller.TransactionController;
 
 @SuppressWarnings("rawtypes")
@@ -109,22 +108,6 @@ public enum FxmlView {
     @Override
     public Class getController() {
       return RecipientController.class;
-    }
-  },
-  SUBJECTMATTER {
-    @Override
-    public String getTitle() {
-      return getStringFromResourceBundle("subjectmatter.title");
-    }
-
-    @Override
-    public String getFxmlFile() {
-      return "/fxml/SubjectMatter.fxml";
-    }
-
-    @Override
-    public Class getController() {
-      return SubjectMatterController.class;
     }
   },
   TRANSACTION {

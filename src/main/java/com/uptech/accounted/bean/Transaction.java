@@ -13,7 +13,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -67,10 +66,6 @@ public class Transaction {
   @NonNull
   private String narration;
 
-  @NonNull
-  @OneToOne
-  private SubjectMatter subjectMatter;
-
   @Enumerated(EnumType.STRING)
   private TransactionType transactionType;
 
@@ -94,10 +89,6 @@ public class Transaction {
     return recipient.getName();
   }
 
-  public String getSubjectMatterName() {
-    return subjectMatter.getName();
-  }
-
   @Override
   public String toString() {
     return "\""+transactionId +"\""+
@@ -109,7 +100,6 @@ public class Transaction {
                   ",\"" + ledgerType.getLedgerName() +"\""+
                   ",\"" + subledgerType.getSubledgerName() +"\""+
                   ",\"" + TransactionController.formatLakh( amount.doubleValue() )+"\""+
-                  ",\"" + subjectMatter.getName() +"\""+
                   ",\"" + transactionType+"\""+
                   ",\"" + narration+"\"";
   }
@@ -128,7 +118,6 @@ public class Transaction {
                   "\n Ledger: " + ledgerType.getLedgerName() +
                   "\n Sub Ledger: " + subledgerType.getSubledgerName() +
                   "\n Amount: " + amount +
-                  "\n Umoor: " + subjectMatter.getName() +
                   "\n Type: " + transactionType+
                   "\n Narration: " + narration;
   }
