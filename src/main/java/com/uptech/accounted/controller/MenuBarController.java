@@ -47,10 +47,6 @@ public class MenuBarController implements Initializable {
     stageManager.switchScene(FxmlView.RECIPIENT);
   }
 
-  public void showSubjectMatterForm(ActionEvent actionEvent) {
-    stageManager.switchScene(FxmlView.SUBJECTMATTER);
-  }
-
   public void showTransactionForm(ActionEvent actionEvent) {
     stageManager.switchScene(FxmlView.TRANSACTION);
   }
