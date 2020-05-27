@@ -83,9 +83,6 @@ public class TransactionController implements Initializable {
   private ComboBox<String> cbSubledgerType;
 
   @FXML
-  private ComboBox<String> cbSubjectMatter;
-
-  @FXML
   private ComboBox<TransactionType> cbTransactionType;
 
   @FXML
@@ -138,9 +135,6 @@ public class TransactionController implements Initializable {
 
   @FXML
   private TableColumn<Transaction, String> colNarration;
-
-  @FXML
-  private TableColumn<Transaction, String> colSubjectMatter;
 
   @FXML
   private TableColumn<Transaction, String> colTransactionType;
@@ -212,7 +206,6 @@ public class TransactionController implements Initializable {
     cbRecipient.getSelectionModel().clearSelection();
     cbLedgerType.getSelectionModel().clearSelection();
     cbSubledgerType.getSelectionModel().clearSelection();
-    cbSubjectMatter.getSelectionModel().clearSelection();
     cbTransactionType.getSelectionModel().clearSelection();
     amount.clear();
     narration.clear();
@@ -274,10 +267,6 @@ public class TransactionController implements Initializable {
 
   public TransactionType getTransactionType() {
     return cbTransactionType.getSelectionModel().getSelectedItem();
-  }
-
-  public String getSubjectMatter() {
-    return cbSubjectMatter.getSelectionModel().getSelectedItem().split("-")[0];
   }
 
   public String getRecipient() {
@@ -363,6 +352,7 @@ public class TransactionController implements Initializable {
     return transactionService.fullTextSearch(searchTextField.getText());
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     id.setDisable(true);
@@ -402,7 +392,7 @@ public class TransactionController implements Initializable {
       }
     });
 
-    cbSubledgerType.addEventHandler(KeyEvent.KEY_PRESSED, new AutoCompleteComboBoxListener(cbSubledgerType));
+//    cbSubledgerType.addEventHandler(KeyEvent.KEY_PRESSED, new AutoCompleteComboBoxListener(cbSubledgerType));
 
     transactionTable.setOnMouseClicked(event -> {
       try {
@@ -533,7 +523,6 @@ public class TransactionController implements Initializable {
     colTransactionType.setCellValueFactory(new PropertyValueFactory<>("transactionType"));
     colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     colNarration.setCellValueFactory(new PropertyValueFactory<>("narration"));
-    colSubjectMatter.setCellValueFactory(new PropertyValueFactory<>("subjectMatterName"));
     colSubledgerType.setCellValueFactory(new PropertyValueFactory<>("subledgerName"));
 
     colDateOfTransaction.setCellValueFactory(new PropertyValueFactory<>("dateOfTransaction"));

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.uptech.accounted.bean.Transaction;
 import com.uptech.accounted.repository.TransactionRepository;
 
@@ -41,9 +43,18 @@ public class TransactionServiceImpl {
   }
 
   public List<Transaction> fullTextSearch(String text) {
-    return StreamSupport
-        .stream(repository.findAll().spliterator(), false).parallel()
+    return StreamSupport.stream(repository.findAll().spliterator(), false).parallel()
         .filter(transaction -> transaction.toString().toLowerCase().contains(text.toLowerCase()))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * 
+   * @param whereClause - Optional Parameter
+   * @param orderBy - mandatory to be provided
+   * @return Query results as a Iterator
+   */
+  public Iterable<Transaction> findWhere(BooleanExpression whereClause, OrderSpecifier<?> orderBy) {
+    return repository.findAll(whereClause, orderBy);
   }
 }

@@ -38,7 +38,6 @@ import com.uptech.accounted.config.StageManager;
 import com.uptech.accounted.repository.DepartmentRepository;
 import com.uptech.accounted.repository.InitiatorRepository;
 import com.uptech.accounted.repository.RecipientRepository;
-import com.uptech.accounted.repository.TransactionRepository;
 import com.uptech.accounted.service.LedgerServiceImpl;
 import com.uptech.accounted.service.SubledgerServiceImpl;
 import com.uptech.accounted.service.TransactionServiceImpl;
@@ -78,9 +77,6 @@ public class ReportsController implements Initializable {
   private CheckComboBox<String> cbSubledgerType;
 
   @FXML
-  private CheckComboBox<String> cbSubjects;
-
-  @FXML
   private CheckComboBox<TransactionType> cbTransactions;
 
   @FXML
@@ -118,15 +114,11 @@ public class ReportsController implements Initializable {
   private SubledgerServiceImpl subledgerServiceImpl;
 
   @Autowired
-  private TransactionRepository transactionRepository;
-
-  @Autowired
   private RecipientRepository recipientRepository;
 
   @Autowired
   private TransactionServiceImpl transactionService;
 
-  private ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
   private ObservableList<String> ledgerComboList = FXCollections.observableArrayList();
 
   @FXML
@@ -142,7 +134,6 @@ public class ReportsController implements Initializable {
     cbRecipients.getCheckModel().clearChecks();
     cbLedgerType.getCheckModel().clearChecks();
     cbSubledgerType.getCheckModel().clearChecks();
-    cbSubjects.getCheckModel().clearChecks();
     cbTransactions.getCheckModel().clearChecks();
     tbFromAmount.clear();
     tbToAmount.clear();
@@ -176,7 +167,7 @@ public class ReportsController implements Initializable {
         .and(transaction.subledgerType.in(subledgers)).and(transaction.dateOfTransaction.after(fromDate.getValue().minusDays(1)))
         .and(transaction.dateOfTransaction.before(toDate.getValue().plusDays(1)))
         .and(transaction.amount.between(new BigDecimal(getFromAmount()), new BigDecimal(getToAmount())));
-    Iterable<Transaction> all = transactionRepository.findAll(in, transaction.dateOfTransaction.asc());
+    Iterable<Transaction> all = transactionService.findWhere(in, transaction.dateOfTransaction.asc());
 
     save(event, all);
   }
@@ -290,7 +281,6 @@ public class ReportsController implements Initializable {
     cbDepartments.getCheckModel().checkAll();
     cbRecipients.getCheckModel().checkAll();
     cbTransactions.getCheckModel().checkAll();
-    cbSubjects.getCheckModel().checkAll();
     cbLedgerType.getCheckModel().checkAll();
     double parseDouble = Double.parseDouble("999999999999.0");
     tbToAmount.setText(formatLakh(parseDouble));
@@ -359,7 +349,6 @@ public class ReportsController implements Initializable {
     loadMaster(recipientRepository, cbRecipients);
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   private void loadLedgers() {
     ledgerComboList.clear();
     List<Ledger> ledgerList = ledgerServiceImpl.findAll();
@@ -434,11 +423,4 @@ public class ReportsController implements Initializable {
     cbSubledgerType.getCheckModel().clearChecks();
   }
 
-  public void checkAllSubjects(ActionEvent actionEvent) {
-    cbSubjects.getCheckModel().checkAll();
-  }
-
-  public void uncheckAllSubjects(ActionEvent actionEvent) {
-    cbSubjects.getCheckModel().clearChecks();
-  }
 }
