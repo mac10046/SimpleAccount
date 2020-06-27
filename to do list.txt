@@ -1,0 +1,7 @@
+Change Password Implementation
+User Management and Access Permissions.
+Hide or Show Hijri Date Column
+README text writing - https://www.makeareadme.com/ and upload Images in the README as well
+Change the encryption key
+Change the repo address at github and all
+Test it out
